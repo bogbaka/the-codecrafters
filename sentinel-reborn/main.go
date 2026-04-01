@@ -9,7 +9,7 @@ import (
 
 func main() {
 	if len(os.Args) != 3 {
-		fmt.Println("Correcg Usage go run . samplel.txt result.txt")
+		fmt.Println("Correct Usage go run . sample.txt result.txt")
 		return
 	}
 

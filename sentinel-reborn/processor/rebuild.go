@@ -1,3 +1,3 @@
 package processor
 
-func Rebuild(tokens []string) string
+func Rebuild(token []string) string

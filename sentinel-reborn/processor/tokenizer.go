@@ -1,3 +1,3 @@
 package processor
 
-func Tokenize(token string) []string
+func Tokenize(tokens string) []string

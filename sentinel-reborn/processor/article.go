@@ -1,3 +1,3 @@
 package processor
 
-func FixArticle(token string) []string
+func FixArticle(token []string) []string

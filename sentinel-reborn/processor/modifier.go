@@ -1,3 +1,3 @@
 package processor
 
-func Modifier(token []string) []string
+func Modifier(tokens []string) []string

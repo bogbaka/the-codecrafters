@@ -2,34 +2,40 @@ package main
 
 import (
 	"fmt"
+	"sentinel-reborn/processor"
 	"os"
+	"strings"
 )
 
 func main() {
-
-	// Ensure the program receives exactly two arguments: input and output files
 	if len(os.Args) != 3 {
-		fmt.Println("Usage: go run . input.txt output.txt")
+		fmt.Println("Correct Usage go run . sample.txt result.txt")
 		return
 	}
 
-	// Get input and output file paths
-	inputFile := os.Args[1]
-	outputFile := os.Args[2]
+	inputfile := os.Args[1]
+	outputfile := os.Args[2]
 
-	// Read the content of the input file
-	data, err := os.ReadFile(inputFile)
+	data, err := os.ReadFile(inputfile)
 	if err != nil {
-		fmt.Println("Error reading file:", err)
+		fmt.Println("Error reading file", err)
 		return
 	}
 
-	result := textprocessor.ProcessText(string(data))
+	text := string(data)
+	tokens := processor.Tokenize(text)
+	tokens = processor.Modifier(tokens)
+	tokens = processor.FixArticle(tokens)
+	result := processor.Rebuild(tokens)
 
-	// Write the processed text to the output file
-	err = os.WriteFile(outputFile, []byte(result+"\n"), 0644)
+	if !strings.HasSuffix(result, "\n") {
+		result += "\n"
+	}
+	err = os.WriteFile(outputfile, []byte(result), 0644)
 	if err != nil {
-		fmt.Println("Error writing file:", err)
+		fmt.Println("Error Writing file", err)
 		return
 	}
+	fmt.Println("Process completed")
 }
+

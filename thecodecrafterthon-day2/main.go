@@ -1,72 +1,77 @@
 package main
 
 import (
-"fmt"
-"strconv"
-"strings"
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
 )
 
-func ToDecimal(num string, base int) (int64, error) {
-return strconv.ParseInt(num, base, 64)
-}
-
-func FromDecimal(num int64, base int) string {
-return strings.ToUpper(strconv.FormatInt(num, 10))
-}
 func main() {
-for {
-var command string
+	scanner := bufio.NewScanner(os.Stdin)
 
-fmt.Println("Enter command: ")
-fmt.Scan(&command)
+	fmt.Println(" ")
+	fmt.Println("Welcome To My Base Converter!")
+	fmt.Println("You can convert between bases such as base 2, 16 and 10.")
+	fmt.Print("For Smooth Xperience, here is a quick guide.\n1: You type directly in your terminal.\n2: Your firt word must be 'convert'follows by base and str.\n3: Also, you can type quit to exit the program at any point.\n")
+	fmt.Println(" ")
 
-command = strings.ToLower(strings.TrimSpace(command))
+	for {
 
-if command == "quit" {
-fmt.Println("Goodbye!")
-break
-}
+		scanner.Scan()
+		texts := scanner.Text()
+		texts = strings.TrimSpace(texts)
+		//texts = strings.ToUpper(texts)
 
-var num, base string
-fmt.Scan(&num, &base)
+		if texts == "Quit" {
+			break
+		}
+		if texts == "" {
+			fmt.Println("Error: Empty input")
+			continue
+		}
 
-if command == "" || num == "" || base == "" {
-fmt.Println("Invalid format. use: convert <number> <base>")
-continue
-}
-if command != "convert" {
-fmt.Println("Unknown command")
-continue
-}
-if base == "hex" {
-val, err := ToDecimal(num, 16)
-if err != nil {
-fmt.Println("invalid hex")
-continue
-}
-fmt.Println("Decimal:", val)
+		splitText := strings.Fields(texts)
 
-} else if base == "bin" {
-val, err := ToDecimal(num, 2)
-if err != nil {
-fmt.Println("Invalid binary")
-continue
-}
-fmt.Println("Decimal:", val)
+		if len(splitText) != 3 {
+			fmt.Println("Error: Not enough input!")
+			continue
+		}
 
-} else if base == "dec" {
-val, err := ToDecimal(num, 10)
-if err != nil {
-fmt.Println("Invalid decimal")
-continue
-}
-fmt.Printf("Binary: %b\n", num)
-fmt.Println("Hex:", FromDecimal(val, 16))
+		if splitText[0] != "convert" {
+			fmt.Println("Error: The words must start with convert!")
+		}
 
-} else {
-fmt.Println("Unknown base")
-}
+		secondPart := splitText[1]
+		thirdpart := splitText[2]
 
-}
+		switch thirdpart {
 
+		case "hex":
+			n, err := strconv.ParseInt(secondPart, 16, 64)
+			if err != nil {
+				fmt.Println("Error:", secondPart+" is not a valid hex! ")
+				continue
+			}
+			fmt.Println("Decimal:", n)
+		case "bin":
+			n, err := strconv.ParseInt(secondPart, 2, 64)
+			if err != nil {
+				fmt.Println("Error:", secondPart+" is not a valid binary! ")
+				continue
+			}
+			fmt.Println("Decimal:", n)
+
+		case "dec":
+			n, err := strconv.ParseInt(secondPart, 10, 64)
+			if err != nil {
+				fmt.Println("Error:", secondPart+" is not a valid decimal! ")
+				continue
+			}
+			fmt.Printf("Binary %b\n", n)
+			fmt.Printf("Hex %X\n", n)
+		}
+
+	}
 }
